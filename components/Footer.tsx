@@ -67,37 +67,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom copyright */}
-        <div className="pt-6 sm:pt-8 border-t border-brand-border/60 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs font-mono text-brand-slate gap-3 text-center sm:text-left">
-          <div>© {new Date().getFullYear()} DevTools. Todos los derechos reservados.</div>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-            <span>Next.js 16 SSR</span>
-            <span>TypeScript</span>
-            <span>Clean Architecture</span>
-          </div>
-        </div>
-
-        {/* Grand Brand Signature Reveal (Large Isotipo + Logotipo) */}
-        <div className="pt-14 sm:pt-20 pb-8 flex flex-col items-center justify-center border-t border-brand-border/40 mt-10 relative overflow-hidden">
-          <img
-            src="/LINEAS HORIZONTALES VERDES-1.png"
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none mix-blend-multiply"
-          />
-          <div className="relative z-10 flex flex-col items-center text-center gap-4">
-            <img
-              src="/isotipo-1.png"
-              alt="DevTools Isotipo"
-              className="h-28 sm:h-40 lg:h-48 w-auto object-contain transition-transform duration-700 hover:scale-110 filter drop-shadow-2xl"
-            />
-            <img
-              src="/logotipo-1.png"
-              alt="DevTools Logotipo"
-              className="h-12 sm:h-16 lg:h-20 w-auto object-contain opacity-90"
-            />
-            <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-brand-slate font-semibold mt-1">
-              SOFTWARE ENGINEERING STUDIO // FULL SDLC
-            </span>
-          </div>
+        <div className="pt-6 sm:pt-8 border-t border-brand-border/60 text-center sm:text-left text-[11px] sm:text-xs font-mono text-brand-slate">
+          © {new Date().getFullYear()} DevTools. Todos los derechos reservados.
         </div>
       </div>
     </footer>
