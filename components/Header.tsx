@@ -99,70 +99,74 @@ export default function Header() {
       </div>
 
       {/* Mobile Navigation Drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-white border-b border-brand-border px-6 pt-4 pb-8 flex flex-col gap-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
-          <div className="flex items-center justify-between px-3 py-2 rounded-full bg-brand-light border border-brand-border w-fit">
-            <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
-            <span className="font-mono text-[11px] text-brand-navy font-medium">
-              Q3/Q4 · 2 CUPOS SDLC DISPONIBLES
-            </span>
-          </div>
-
-          <nav className="flex flex-col gap-4 font-mono text-sm uppercase tracking-wider text-brand-navy font-semibold">
-            <a
-              href="#servicios"
-              onClick={closeMenu}
-              className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
-            >
-              <span>Servicios</span>
-              <span className="material-symbols-outlined text-xs">chevron_right</span>
-            </a>
-            <a
-              href="#disponibilidad"
-              onClick={closeMenu}
-              className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
-            >
-              <span>Disponibilidad</span>
-              <span className="material-symbols-outlined text-xs">chevron_right</span>
-            </a>
-            <a
-              href="#metodologia"
-              onClick={closeMenu}
-              className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
-            >
-              <span>Método SDLC</span>
-              <span className="material-symbols-outlined text-xs">chevron_right</span>
-            </a>
-            <a
-              href="#casos"
-              onClick={closeMenu}
-              className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
-            >
-              <span>Casos</span>
-              <span className="material-symbols-outlined text-xs">chevron_right</span>
-            </a>
-            <a
-              href="#faq"
-              onClick={closeMenu}
-              className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
-            >
-              <span>FAQ</span>
-              <span className="material-symbols-outlined text-xs">chevron_right</span>
-            </a>
-          </nav>
-
-          <a
-            href="#contacto"
-            onClick={closeMenu}
-            className="w-full text-center py-3.5 rounded-full bg-brand-lime text-brand-navy font-display font-bold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2"
-          >
-            <span>Agendar Diagnóstico Tech</span>
-            <span className="material-symbols-outlined text-[16px]">
-              arrow_forward
-            </span>
-          </a>
+      <div
+        className={`md:hidden fixed top-20 left-0 w-full h-[calc(100vh-5rem)] bg-white px-6 pt-6 pb-8 flex flex-col gap-6 overflow-y-auto transition-all duration-300 ease-in-out ${
+          isOpen
+            ? "opacity-100 translate-x-0"
+            : "opacity-0 -translate-x-4 pointer-events-none"
+        }`}
+      >
+        <div className="flex items-center justify-between px-3 py-2 rounded-full bg-brand-light border border-brand-border w-fit">
+          <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
+          <span className="font-mono text-[11px] text-brand-navy font-medium">
+            Q3/Q4 · 2 CUPOS SDLC DISPONIBLES
+          </span>
         </div>
-      )}
+
+        <nav className="flex flex-col gap-4 font-mono text-sm uppercase tracking-wider text-brand-navy font-semibold flex-grow">
+          <a
+            href="#servicios"
+            onClick={closeMenu}
+            className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
+          >
+            <span>Servicios</span>
+            <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </a>
+          <a
+            href="#disponibilidad"
+            onClick={closeMenu}
+            className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
+          >
+            <span>Disponibilidad</span>
+            <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </a>
+          <a
+            href="#metodologia"
+            onClick={closeMenu}
+            className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
+          >
+            <span>Método SDLC</span>
+            <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </a>
+          <a
+            href="#casos"
+            onClick={closeMenu}
+            className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
+          >
+            <span>Casos</span>
+            <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </a>
+          <a
+            href="#faq"
+            onClick={closeMenu}
+            className="py-2 border-b border-brand-border/40 hover:text-brand-slate transition-colors flex items-center justify-between"
+          >
+            <span>FAQ</span>
+            <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </a>
+        </nav>
+
+        <a
+          href="#contacto"
+          onClick={closeMenu}
+          className="w-full text-center py-4 rounded-full bg-brand-lime text-brand-navy font-display font-bold text-[13px] uppercase tracking-wider shadow-md flex items-center justify-center gap-2 mt-auto mb-4"
+        >
+          <span>Agendar Diagnóstico Tech</span>
+          <span className="material-symbols-outlined text-[16px]">
+            arrow_forward
+          </span>
+        </a>
+      </div>
     </header>
   );
 }
