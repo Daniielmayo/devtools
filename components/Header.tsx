@@ -22,14 +22,14 @@ export default function Header() {
           <img
             src="/logotipo-1.png"
             alt="DevTools Logotipo"
-            className="hidden sm:block h-8 sm:h-9 w-auto object-contain"
+            className="hidden sm:block h-11 sm:h-12 lg:h-14 w-auto object-contain"
           />
           {/* Mobile Logo */}
-          <div className="flex sm:hidden items-center gap-2 font-display font-black text-xl tracking-tighter text-brand-navy">
+          <div className="flex sm:hidden items-center gap-2.5 font-display font-black text-2xl tracking-tighter text-brand-navy">
             <img
               src="/isotipo-1.png"
               alt="DevTools Isotipo"
-              className="h-7 w-auto object-contain"
+              className="h-9 w-auto object-contain"
             />
             <span>DEVTOOLS</span>
             <span className="text-brand-slate text-xs font-mono tracking-widest font-normal">
