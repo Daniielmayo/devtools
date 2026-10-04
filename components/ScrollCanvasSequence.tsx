@@ -186,19 +186,20 @@ export default function ScrollCanvasSequence({
         const stickyDiv = stickyRef.current;
 
         if (isMobile) {
-          // 1. Hero Zone (scrollProgress < 0.15): Full opacity (1.0) & IN FRONT of hero card (z-20)
-          // 2. Middle Zone (0.15 <= scrollProgress <= 0.75): Fades to 0.18 translucent watermark BEHIND text (z-0)
-          // 3. End Zone (scrollProgress > 0.75): Regains opacity up to 1.0 (z-20) in final sections/footer
-          if (scrollProgress < 0.15) {
+          // 1. Hero Zone (scrollProgress < 0.03): Full opacity (1.0) & IN FRONT of hero card (z-20)
+          // 2. Immediate Hero Exit (0.03 <= scrollProgress <= 0.10): Rapidly dissolves to 0.18 translucent BEHIND text (z-0)
+          // 3. Middle Zone (0.10 < scrollProgress <= 0.80): Stays translucent watermark behind text (z-0)
+          // 4. End Zone (scrollProgress > 0.80): Regains full opacity up to 1.0 (z-20) in final sections/footer
+          if (scrollProgress < 0.03) {
             ctx.globalAlpha = 1.0;
             if (stickyDiv) stickyDiv.style.zIndex = "20";
-          } else if (scrollProgress >= 0.15 && scrollProgress <= 0.75) {
-            const fadeProgress = (scrollProgress - 0.15) / 0.2; // 0.0 -> 1.0
+          } else if (scrollProgress >= 0.03 && scrollProgress <= 0.80) {
+            const fadeProgress = (scrollProgress - 0.03) / 0.07; // Fades completely between 0.03 and 0.10 scrollProgress
             const opacity = Math.max(0.18, 1.0 - Math.min(1, fadeProgress) * 0.82);
             ctx.globalAlpha = opacity;
             if (stickyDiv) stickyDiv.style.zIndex = opacity > 0.5 ? "20" : "0";
           } else {
-            const recoveryProgress = (scrollProgress - 0.75) / 0.22; // 0.0 -> 1.0 over last 2 sections
+            const recoveryProgress = (scrollProgress - 0.80) / 0.18; // 0.0 -> 1.0 over last sections
             const opacity = Math.min(1.0, 0.18 + Math.min(1, recoveryProgress) * 0.82);
             ctx.globalAlpha = opacity;
             if (stickyDiv) stickyDiv.style.zIndex = opacity > 0.5 ? "20" : "0";
