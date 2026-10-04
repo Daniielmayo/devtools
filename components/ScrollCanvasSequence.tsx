@@ -162,26 +162,20 @@ export default function ScrollCanvasSequence({
 
           ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-          // Aspect Ratio Fit (Contain)
+          // Harmonious sizing: Max 310px height on desktop, 200px on mobile
+          const isMobile = canvasWidth < 640;
+          const maxAllowedHeight = isMobile ? Math.min(canvasHeight * 0.28, 200) : Math.min(canvasHeight * 0.35, 310);
+
           const imgAspect = img.width / img.height;
-          const canvasAspect = canvasWidth / canvasHeight;
+          const drawHeight = maxAllowedHeight;
+          const drawWidth = drawHeight * imgAspect;
 
-          let drawWidth = canvasWidth;
-          let drawHeight = canvasHeight;
-          let offsetX = 0;
-          let offsetY = 0;
+          // Position in bottom-right corner as a discrete, non-intrusive side companion
+          const paddingRight = isMobile ? 16 : 48;
+          const paddingBottom = isMobile ? 24 : 40;
 
-          if (canvasAspect > imgAspect) {
-            drawHeight = canvasHeight * 0.75; // 75% height for elegant floating placement
-            drawWidth = drawHeight * imgAspect;
-            offsetX = (canvasWidth - drawWidth) / 2;
-            offsetY = (canvasHeight - drawHeight) / 2;
-          } else {
-            drawWidth = canvasWidth * 0.75;
-            drawHeight = drawWidth / imgAspect;
-            offsetX = (canvasWidth - drawWidth) / 2;
-            offsetY = (canvasHeight - drawHeight) / 2;
-          }
+          const offsetX = canvasWidth - drawWidth - paddingRight;
+          const offsetY = canvasHeight - drawHeight - paddingBottom;
 
           ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
           lastDrawnIndex = clampedIndex;
@@ -221,7 +215,7 @@ export default function ScrollCanvasSequence({
         className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20 transition-opacity duration-300"
         style={{ opacity }}
       >
-        <canvas ref={canvasRef} className="block max-w-full max-h-full mix-blend-multiply dark:mix-blend-screen" />
+        <canvas ref={canvasRef} className="block max-w-full max-h-full" />
       </div>
     </div>
   );
