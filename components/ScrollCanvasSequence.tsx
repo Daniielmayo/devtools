@@ -155,23 +155,24 @@ export default function ScrollCanvasSequence({
         const isMobile = canvasWidth < 640;
         const imgAspect = img.width / img.height;
 
-        // 1. Initial State at progress = 0 (Shifted ~50px right in Hero, larger size)
+        // 1. Initial State at progress = 0 (Shifted +60px right in Hero, larger size)
         const startDrawHeight = isMobile ? 220 : Math.min(canvasHeight * 0.42, 380);
         const startDrawWidth = startDrawHeight * imgAspect;
-        const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 20 : 50);
+        const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 25 : 60);
         const startY = (canvasHeight - startDrawHeight) / 2 + (isMobile ? 40 : 110);
 
-        // 2. Final State at progress = 1 (Further right on desktop, smaller companion size)
+        // 2. Final State when scrolling out of Hero (Shifted further right to the screen edge)
         const endDrawHeight = isMobile ? 160 : Math.min(canvasHeight * 0.28, 250);
         const endDrawWidth = endDrawHeight * imgAspect;
-        const paddingRight = isMobile ? 12 : 12;
-        const paddingBottom = isMobile ? 20 : 36;
+        // Negative padding compensates for transparent frame margins, placing the dog right at the screen edge
+        const paddingRight = isMobile ? -25 : -90;
+        const paddingBottom = isMobile ? 10 : 20;
         const endX = canvasWidth - endDrawWidth - paddingRight;
         const endY = canvasHeight - endDrawHeight - paddingBottom;
 
         // Smooth position & scale interpolation based on scroll progress
-        // Easing curve for cinematic transition out of the hero center
-        const transitionProgress = Math.min(1, Math.max(0, scrollProgress * 2.5)); // Moves to right side during first 40% of scroll
+        // Easing curve for swift, fluid transition out of the hero section
+        const transitionProgress = Math.min(1, Math.max(0, scrollProgress * 3.5)); // Rapid transition to right edge on hero scroll
         const easeProgress = 1 - Math.pow(1 - transitionProgress, 3); // Cubic ease-out
 
         const drawHeight = startDrawHeight + (endDrawHeight - startDrawHeight) * easeProgress;
