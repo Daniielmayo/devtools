@@ -181,9 +181,9 @@ export default function ScrollCanvasSequence({
         const offsetX = startX + (endX - startX) * easeProgress;
         const offsetY = startY + (endY - startY) * easeProgress;
 
-        // Mobile UX: Reduce opacity when leaving Hero so it stays softly in background behind text
+        // Mobile UX: Start 100% opaque in Hero center, dissolve smoothly to 0.18 translucent opacity when leaving Hero
         if (isMobile) {
-          ctx.globalAlpha = Math.max(0.35, 1.0 - easeProgress * 0.65);
+          ctx.globalAlpha = Math.max(0.18, 1.0 - easeProgress * 0.82);
         } else {
           ctx.globalAlpha = 1.0;
         }
