@@ -19,6 +19,7 @@ export default function ScrollCanvasSequence({
 }: ScrollCanvasSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const [isFirstFrameLoaded, setIsFirstFrameLoaded] = useState(false);
 
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
@@ -181,11 +182,30 @@ export default function ScrollCanvasSequence({
         const offsetX = startX + (endX - startX) * easeProgress;
         const offsetY = startY + (endY - startY) * easeProgress;
 
-        // Mobile UX: Start 100% opaque in Hero center, dissolve smoothly to 0.18 translucent opacity when leaving Hero
+        // Dynamic Layering & Opacity for Mobile vs Desktop
+        const stickyDiv = stickyRef.current;
+
         if (isMobile) {
-          ctx.globalAlpha = Math.max(0.18, 1.0 - easeProgress * 0.82);
+          // 1. Hero Zone (scrollProgress < 0.15): Full opacity (1.0) & IN FRONT of hero card (z-20)
+          // 2. Middle Zone (0.15 <= scrollProgress <= 0.75): Fades to 0.18 translucent watermark BEHIND text (z-0)
+          // 3. End Zone (scrollProgress > 0.75): Regains opacity up to 1.0 (z-20) in final sections/footer
+          if (scrollProgress < 0.15) {
+            ctx.globalAlpha = 1.0;
+            if (stickyDiv) stickyDiv.style.zIndex = "20";
+          } else if (scrollProgress >= 0.15 && scrollProgress <= 0.75) {
+            const fadeProgress = (scrollProgress - 0.15) / 0.2; // 0.0 -> 1.0
+            const opacity = Math.max(0.18, 1.0 - Math.min(1, fadeProgress) * 0.82);
+            ctx.globalAlpha = opacity;
+            if (stickyDiv) stickyDiv.style.zIndex = opacity > 0.5 ? "20" : "0";
+          } else {
+            const recoveryProgress = (scrollProgress - 0.75) / 0.22; // 0.0 -> 1.0 over last 2 sections
+            const opacity = Math.min(1.0, 0.18 + Math.min(1, recoveryProgress) * 0.82);
+            ctx.globalAlpha = opacity;
+            if (stickyDiv) stickyDiv.style.zIndex = opacity > 0.5 ? "20" : "0";
+          }
         } else {
           ctx.globalAlpha = 1.0;
+          if (stickyDiv) stickyDiv.style.zIndex = "20";
         }
 
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -220,7 +240,10 @@ export default function ScrollCanvasSequence({
       ref={containerRef}
       className={`absolute inset-0 w-full pointer-events-none ${className}`}
     >
-      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-0 sm:z-20">
+      <div
+        ref={stickyRef}
+        className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20"
+      >
         <canvas ref={canvasRef} className="block max-w-full max-h-full" />
       </div>
     </div>
