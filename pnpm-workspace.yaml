@@ -1,4 +1,4 @@
 allowBuilds:
-  ffmpeg-static: set this to true or false
+  ffmpeg-static: false
   sharp: false
   unrs-resolver: false
