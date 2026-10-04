@@ -12,21 +12,30 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-brand-border/80">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo: Logotipo on Desktop, Isotipo + Text on Mobile */}
         <Link
           href="/"
           onClick={closeMenu}
-          className="font-display font-black text-xl sm:text-2xl tracking-tighter text-brand-navy flex items-center gap-2"
+          className="flex items-center gap-2"
         >
+          {/* Desktop Logo */}
           <img
-            src="/isotipo-1.png"
-            alt="DevTools"
-            className="h-7 sm:h-8 w-auto object-contain"
+            src="/logotipo-1.png"
+            alt="DevTools Logotipo"
+            className="hidden sm:block h-8 sm:h-9 w-auto object-contain"
           />
-          <span>DEVTOOLS</span>
-          <span className="text-brand-slate text-xs sm:text-sm font-mono tracking-widest font-normal">
-            {"//"} SDLC
-          </span>
+          {/* Mobile Logo */}
+          <div className="flex sm:hidden items-center gap-2 font-display font-black text-xl tracking-tighter text-brand-navy">
+            <img
+              src="/isotipo-1.png"
+              alt="DevTools Isotipo"
+              className="h-7 w-auto object-contain"
+            />
+            <span>DEVTOOLS</span>
+            <span className="text-brand-slate text-xs font-mono tracking-widest font-normal">
+              {"//"} SDLC
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav Links */}
