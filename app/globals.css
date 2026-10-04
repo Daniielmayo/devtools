@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-lime: #BFE063;
+  --color-brand-navy: #001738;
+  --color-brand-deep: #012456;
+  --color-brand-slate: #7A8491;
+  --color-brand-border: #E2E8F0;
+  --color-brand-light: #F8FAFC;
+  --font-display: var(--font-plus-jakarta), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-mono: var(--font-space-grotesk), monospace;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: ticker 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-brand-navy);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
