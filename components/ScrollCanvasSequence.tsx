@@ -156,12 +156,12 @@ export default function ScrollCanvasSequence({
         const isMobile = canvasWidth < 640;
         const imgAspect = img.width / img.height;
 
-        // 1. Initial State at progress = 0 (Aligned with top Hero Card on mobile, centered right on desktop)
-        const startDrawHeight = isMobile ? 210 : Math.min(canvasHeight * 0.42, 380);
+        // 1. Initial State at progress = 0 (Centered in spacious top Hero Card on mobile, centered right on desktop)
+        const startDrawHeight = isMobile ? 180 : Math.min(canvasHeight * 0.42, 380);
         const startDrawWidth = startDrawHeight * imgAspect;
         const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 0 : 60);
         const startY = isMobile
-          ? 140
+          ? 225
           : (canvasHeight - startDrawHeight) / 2 + 110;
 
         // 2. Final State when scrolling out of Hero
