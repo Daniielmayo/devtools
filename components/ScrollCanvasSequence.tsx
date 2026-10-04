@@ -155,23 +155,24 @@ export default function ScrollCanvasSequence({
         const isMobile = canvasWidth < 640;
         const imgAspect = img.width / img.height;
 
-        // 1. Initial State at progress = 0 (Shifted +60px right in Hero, larger size)
-        const startDrawHeight = isMobile ? 220 : Math.min(canvasHeight * 0.42, 380);
+        // 1. Initial State at progress = 0 (Aligned with top Hero Card on mobile, centered right on desktop)
+        const startDrawHeight = isMobile ? 210 : Math.min(canvasHeight * 0.42, 380);
         const startDrawWidth = startDrawHeight * imgAspect;
-        const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 25 : 60);
-        const startY = (canvasHeight - startDrawHeight) / 2 + (isMobile ? 40 : 110);
+        const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 0 : 60);
+        const startY = isMobile
+          ? 140
+          : (canvasHeight - startDrawHeight) / 2 + 110;
 
-        // 2. Final State when scrolling out of Hero (Shifted further right to the screen edge)
-        const endDrawHeight = isMobile ? 160 : Math.min(canvasHeight * 0.28, 250);
+        // 2. Final State when scrolling out of Hero
+        const endDrawHeight = isMobile ? 150 : Math.min(canvasHeight * 0.28, 250);
         const endDrawWidth = endDrawHeight * imgAspect;
         // Negative padding compensates for transparent frame margins, placing the dog right at the screen edge
-        const paddingRight = isMobile ? -25 : -90;
+        const paddingRight = isMobile ? -20 : -90;
         const paddingBottom = isMobile ? 10 : 20;
         const endX = canvasWidth - endDrawWidth - paddingRight;
         const endY = canvasHeight - endDrawHeight - paddingBottom;
 
         // Smooth position & scale interpolation based on scroll progress
-        // Easing curve for swift, fluid transition out of the hero section
         const transitionProgress = Math.min(1, Math.max(0, scrollProgress * 3.5)); // Rapid transition to right edge on hero scroll
         const easeProgress = 1 - Math.pow(1 - transitionProgress, 3); // Cubic ease-out
 
@@ -179,6 +180,13 @@ export default function ScrollCanvasSequence({
         const drawWidth = drawHeight * imgAspect;
         const offsetX = startX + (endX - startX) * easeProgress;
         const offsetY = startY + (endY - startY) * easeProgress;
+
+        // Mobile UX: Reduce opacity when leaving Hero so it stays softly in background behind text
+        if (isMobile) {
+          ctx.globalAlpha = Math.max(0.35, 1.0 - easeProgress * 0.65);
+        } else {
+          ctx.globalAlpha = 1.0;
+        }
 
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
@@ -212,7 +220,7 @@ export default function ScrollCanvasSequence({
       ref={containerRef}
       className={`absolute inset-0 w-full pointer-events-none ${className}`}
     >
-      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20">
+      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-0 sm:z-20">
         <canvas ref={canvasRef} className="block max-w-full max-h-full" />
       </div>
     </div>

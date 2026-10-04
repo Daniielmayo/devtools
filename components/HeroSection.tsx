@@ -1,34 +1,8 @@
 export default function HeroSection() {
   return (
-    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-8 sm:pt-16 pb-10 sm:pb-12">
-      {/* Top Row: Titular monumental + Subtítulo */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-end mb-8 sm:mb-12">
-        <div className="lg:col-span-8">
-          <h1 className="font-display font-extrabold text-3xl sm:text-6xl lg:text-[90px] leading-[0.95] sm:leading-[0.92] tracking-tighter uppercase text-brand-navy">
-            INGENIERÍA <br />
-            DE SOFTWARE.
-          </h1>
-        </div>
-        <div className="lg:col-span-4 pb-1 sm:pb-2">
-          <p className="text-brand-slate text-sm sm:text-lg leading-relaxed">
-            En <strong>DevTools</strong> transformamos necesidades complejas en
-            soluciones tecnológicas robustas. Gestionamos{" "}
-            <strong>todo el ciclo de vida del software</strong>: desde la
-            arquitectura inicial hasta el despliegue y mantenimiento continuo.
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="inline-block px-3 py-1 rounded-full bg-brand-navy text-white font-mono text-[11px] sm:text-xs uppercase font-medium tracking-wider">
-              Ciclo de Vida 360°
-            </span>
-            <span className="inline-block px-3 py-1 rounded-full bg-brand-lime text-brand-navy font-mono text-[11px] sm:text-xs uppercase font-bold tracking-wider">
-              Sprints Ágiles
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Visual Card */}
-      <div className="relative w-full min-h-[460px] sm:h-[480px] lg:h-[520px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-brand-deep shadow-2xl border border-brand-border p-6 sm:p-8 flex flex-col justify-between">
+    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 pt-6 sm:pt-16 pb-10 sm:pb-12 flex flex-col gap-6 sm:gap-8">
+      {/* Hero Visual Card: 1st on mobile, 2nd on desktop */}
+      <div className="order-1 lg:order-2 relative w-full min-h-[400px] sm:h-[480px] lg:h-[520px] rounded-[24px] sm:rounded-[28px] overflow-hidden bg-brand-deep shadow-2xl border border-brand-border p-6 sm:p-8 flex flex-col justify-between">
         {/* Background Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/40 via-brand-deep to-brand-navy pointer-events-none"></div>
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
@@ -77,6 +51,32 @@ export default function HeroSection() {
             </span>
             <span>Ver Soluciones</span>
           </a>
+        </div>
+      </div>
+
+      {/* Top Row: Titular monumental + Subtítulo: 2nd on mobile, 1st on desktop */}
+      <div className="order-2 lg:order-1 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-end">
+        <div className="lg:col-span-8">
+          <h1 className="font-display font-extrabold text-3xl sm:text-6xl lg:text-[90px] leading-[0.95] sm:leading-[0.92] tracking-tighter uppercase text-brand-navy">
+            INGENIERÍA <br />
+            DE SOFTWARE.
+          </h1>
+        </div>
+        <div className="lg:col-span-4 pb-1 sm:pb-2">
+          <p className="text-brand-slate text-sm sm:text-lg leading-relaxed">
+            En <strong>DevTools</strong> transformamos necesidades complejas en
+            soluciones tecnológicas robustas. Gestionamos{" "}
+            <strong>todo el ciclo de vida del software</strong>: desde la
+            arquitectura inicial hasta el despliegue y mantenimiento continuo.
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="inline-block px-3 py-1 rounded-full bg-brand-navy text-white font-mono text-[11px] sm:text-xs uppercase font-medium tracking-wider">
+              Ciclo de Vida 360°
+            </span>
+            <span className="inline-block px-3 py-1 rounded-full bg-brand-lime text-brand-navy font-mono text-[11px] sm:text-xs uppercase font-bold tracking-wider">
+              Sprints Ágiles
+            </span>
+          </div>
         </div>
       </div>
     </section>
