@@ -11,7 +11,7 @@ interface ScrollCanvasSequenceProps {
 }
 
 export default function ScrollCanvasSequence({
-  startFrame = 30,
+  startFrame = 35,
   frameCount = 240,
   framePrefix = "/frames/dog_",
   frameExtension = ".webp",
