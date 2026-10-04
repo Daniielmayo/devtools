@@ -167,17 +167,17 @@ export default function ScrollCanvasSequence({
         const isMobile = canvasWidth < 640;
         const imgAspect = img.width / img.height;
 
-        // 1. Initial State at progress = 0 (Center of Hero, larger size)
-        const startDrawHeight = isMobile ? 240 : Math.min(canvasHeight * 0.44, 420);
+        // 1. Initial State at progress = 0 (Lowered in Hero banner, larger size)
+        const startDrawHeight = isMobile ? 220 : Math.min(canvasHeight * 0.42, 380);
         const startDrawWidth = startDrawHeight * imgAspect;
         const startX = (canvasWidth - startDrawWidth) / 2;
-        const startY = (canvasHeight - startDrawHeight) / 2;
+        const startY = (canvasHeight - startDrawHeight) / 2 + (isMobile ? 40 : 110);
 
-        // 2. Final State at progress = 1 (Bottom-Right companion, smaller size)
-        const endDrawHeight = isMobile ? 170 : Math.min(canvasHeight * 0.28, 250);
+        // 2. Final State at progress = 1 (Further right on desktop, smaller companion size)
+        const endDrawHeight = isMobile ? 160 : Math.min(canvasHeight * 0.28, 250);
         const endDrawWidth = endDrawHeight * imgAspect;
-        const paddingRight = isMobile ? 16 : 48;
-        const paddingBottom = isMobile ? 24 : 40;
+        const paddingRight = isMobile ? 12 : 12;
+        const paddingBottom = isMobile ? 20 : 36;
         const endX = canvasWidth - endDrawWidth - paddingRight;
         const endY = canvasHeight - endDrawHeight - paddingBottom;
 
