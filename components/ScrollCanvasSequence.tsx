@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 interface ScrollCanvasSequenceProps {
+  startFrame?: number;
   frameCount?: number;
   framePrefix?: string;
   frameExtension?: string;
@@ -10,6 +11,7 @@ interface ScrollCanvasSequenceProps {
 }
 
 export default function ScrollCanvasSequence({
+  startFrame = 30,
   frameCount = 240,
   framePrefix = "/frames/dog_",
   frameExtension = ".webp",
@@ -32,20 +34,20 @@ export default function ScrollCanvasSequence({
       return `${framePrefix}${paddedIndex}${frameExtension}`;
     };
 
-    // 1. Critical FCP Preload: Load Frame 0
+    // 1. Critical FCP Preload: Load Start Frame (Frame 30 -> dog_0031.webp)
     const firstImg = new Image();
-    firstImg.src = getFrameUrl(0);
+    firstImg.src = getFrameUrl(startFrame);
     firstImg.onload = () => {
       if (!isMounted) return;
-      imagesRef.current[0] = firstImg;
+      imagesRef.current[startFrame] = firstImg;
       setIsFirstFrameLoaded(true);
       setLoadedCount(1);
       loadRemainingFramesInChunks();
     };
 
-    // 2. Async Chunk Preload with requestIdleCallback
+    // 2. Async Chunk Preload with requestIdleCallback starting from startFrame
     const loadRemainingFramesInChunks = () => {
-      let currentIndex = 1;
+      let currentIndex = startFrame + 1;
       const CHUNK_SIZE = 15;
 
       const loadNextChunk = () => {
@@ -60,7 +62,7 @@ export default function ScrollCanvasSequence({
             if (!isMounted) return;
             imagesRef.current[i] = img;
             chunkLoaded++;
-            setLoadedCount((prev) => Math.min(prev + 1, frameCount));
+            setLoadedCount((prev) => Math.min(prev + 1, frameCount - startFrame));
             if (chunkLoaded === endIndex - currentIndex) {
               currentIndex = endIndex;
               scheduleChunk();
@@ -90,9 +92,9 @@ export default function ScrollCanvasSequence({
     return () => {
       isMounted = false;
     };
-  }, [frameCount, framePrefix, frameExtension]);
+  }, [startFrame, frameCount, framePrefix, frameExtension]);
 
-  // Canvas Animation & Scroll Sync with Lerp, IntersectionObserver & Zero-Redraw
+  // Canvas Animation & Scroll Sync with Motion Transition & Lerp
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -103,9 +105,9 @@ export default function ScrollCanvasSequence({
 
     let animFrameId: number;
     let isVisible = false;
-    let currentFrame = 0;
-    let targetFrame = 0;
-    let lastDrawnIndex = -1;
+    let currentFrame = startFrame;
+    let targetFrame = startFrame;
+    let scrollProgress = 0;
 
     const setupCanvasDimensions = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -118,7 +120,6 @@ export default function ScrollCanvasSequence({
       canvas.style.height = `${height}px`;
 
       ctx.scale(dpr, dpr);
-      lastDrawnIndex = -1;
     };
 
     setupCanvasDimensions();
@@ -129,12 +130,15 @@ export default function ScrollCanvasSequence({
       const totalScrollableHeight = rect.height - window.innerHeight;
       if (totalScrollableHeight <= 0) return;
 
-      const progress = Math.max(0, Math.min(1, -rect.top / totalScrollableHeight));
-      targetFrame = progress * (frameCount - 1);
+      scrollProgress = Math.max(0, Math.min(1, -rect.top / totalScrollableHeight));
+      
+      // Target frame calculation from startFrame (30) to last frame (239)
+      const effectiveFrames = frameCount - 1 - startFrame;
+      targetFrame = startFrame + scrollProgress * effectiveFrames;
 
-      // Fade out smoothly near the end of the scroll container (last 5% of scroll)
-      if (progress > 0.95) {
-        const fadeProgress = (1 - progress) / 0.05;
+      // Smooth fade out near the end of scroll
+      if (scrollProgress > 0.94) {
+        const fadeProgress = (1 - scrollProgress) / 0.06;
         setOpacity(Math.max(0, fadeProgress));
       } else {
         setOpacity(1);
@@ -145,41 +149,49 @@ export default function ScrollCanvasSequence({
       if (!isVisible) return;
       updateTargetFrame();
 
-      // Lerp for smooth animation tracking
+      // Lerp for ultra-smooth animation tracking
       currentFrame += (targetFrame - currentFrame) * 0.12;
 
       const frameIndexToDraw = Math.round(currentFrame);
-      const clampedIndex = Math.max(0, Math.min(frameCount - 1, frameIndexToDraw));
+      const clampedIndex = Math.max(startFrame, Math.min(frameCount - 1, frameIndexToDraw));
 
-      // Zero-Redraw Optimization: Paint ONLY if frame index changed
-      if (clampedIndex !== lastDrawnIndex) {
-        const img = imagesRef.current[clampedIndex] || imagesRef.current[0];
+      const img = imagesRef.current[clampedIndex] || imagesRef.current[startFrame];
 
-        if (img && img.complete) {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          const canvasWidth = canvas.width / dpr;
-          const canvasHeight = canvas.height / dpr;
+      if (img && img.complete) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const canvasWidth = canvas.width / dpr;
+        const canvasHeight = canvas.height / dpr;
 
-          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-          // Harmonious sizing: Max 310px height on desktop, 200px on mobile
-          const isMobile = canvasWidth < 640;
-          const maxAllowedHeight = isMobile ? Math.min(canvasHeight * 0.28, 200) : Math.min(canvasHeight * 0.35, 310);
+        const isMobile = canvasWidth < 640;
+        const imgAspect = img.width / img.height;
 
-          const imgAspect = img.width / img.height;
-          const drawHeight = maxAllowedHeight;
-          const drawWidth = drawHeight * imgAspect;
+        // 1. Initial State at progress = 0 (Center of Hero, larger size)
+        const startDrawHeight = isMobile ? 240 : Math.min(canvasHeight * 0.44, 420);
+        const startDrawWidth = startDrawHeight * imgAspect;
+        const startX = (canvasWidth - startDrawWidth) / 2;
+        const startY = (canvasHeight - startDrawHeight) / 2;
 
-          // Position in bottom-right corner as a discrete, non-intrusive side companion
-          const paddingRight = isMobile ? 16 : 48;
-          const paddingBottom = isMobile ? 24 : 40;
+        // 2. Final State at progress = 1 (Bottom-Right companion, smaller size)
+        const endDrawHeight = isMobile ? 170 : Math.min(canvasHeight * 0.28, 250);
+        const endDrawWidth = endDrawHeight * imgAspect;
+        const paddingRight = isMobile ? 16 : 48;
+        const paddingBottom = isMobile ? 24 : 40;
+        const endX = canvasWidth - endDrawWidth - paddingRight;
+        const endY = canvasHeight - endDrawHeight - paddingBottom;
 
-          const offsetX = canvasWidth - drawWidth - paddingRight;
-          const offsetY = canvasHeight - drawHeight - paddingBottom;
+        // Smooth position & scale interpolation based on scroll progress
+        // Easing curve for cinematic transition out of the hero center
+        const transitionProgress = Math.min(1, Math.max(0, scrollProgress * 2.5)); // Moves to right side during first 40% of scroll
+        const easeProgress = 1 - Math.pow(1 - transitionProgress, 3); // Cubic ease-out
 
-          ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-          lastDrawnIndex = clampedIndex;
-        }
+        const drawHeight = startDrawHeight + (endDrawHeight - startDrawHeight) * easeProgress;
+        const drawWidth = drawHeight * imgAspect;
+        const offsetX = startX + (endX - startX) * easeProgress;
+        const offsetY = startY + (endY - startY) * easeProgress;
+
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
 
       animFrameId = requestAnimationFrame(render);
@@ -204,7 +216,7 @@ export default function ScrollCanvasSequence({
       cancelAnimationFrame(animFrameId);
       window.removeEventListener("resize", setupCanvasDimensions);
     };
-  }, [frameCount, isFirstFrameLoaded]);
+  }, [startFrame, frameCount, isFirstFrameLoaded]);
 
   return (
     <div
