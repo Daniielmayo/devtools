@@ -16,11 +16,16 @@ export default function Header() {
         <Link
           href="/"
           onClick={closeMenu}
-          className="font-display font-black text-xl sm:text-2xl tracking-tighter text-brand-navy flex items-center gap-1.5 sm:gap-2"
+          className="font-display font-black text-xl sm:text-2xl tracking-tighter text-brand-navy flex items-center gap-2"
         >
+          <img
+            src="/isotipo-1.png"
+            alt="DevTools"
+            className="h-7 sm:h-8 w-auto object-contain"
+          />
           <span>DEVTOOLS</span>
           <span className="text-brand-slate text-xs sm:text-sm font-mono tracking-widest font-normal">
-            // SDLC
+            {"//"} SDLC
           </span>
         </Link>
 
