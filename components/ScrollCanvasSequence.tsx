@@ -19,9 +19,7 @@ export default function ScrollCanvasSequence({
 }: ScrollCanvasSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [loadedCount, setLoadedCount] = useState(0);
   const [isFirstFrameLoaded, setIsFirstFrameLoaded] = useState(false);
-  const [opacity, setOpacity] = useState(1);
 
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
 
@@ -34,14 +32,13 @@ export default function ScrollCanvasSequence({
       return `${framePrefix}${paddedIndex}${frameExtension}`;
     };
 
-    // 1. Critical FCP Preload: Load Start Frame (Frame 30 -> dog_0031.webp)
+    // 1. Critical FCP Preload: Load Start Frame (Frame 35 -> dog_0036.webp)
     const firstImg = new Image();
     firstImg.src = getFrameUrl(startFrame);
     firstImg.onload = () => {
       if (!isMounted) return;
       imagesRef.current[startFrame] = firstImg;
       setIsFirstFrameLoaded(true);
-      setLoadedCount(1);
       loadRemainingFramesInChunks();
     };
 
@@ -62,7 +59,6 @@ export default function ScrollCanvasSequence({
             if (!isMounted) return;
             imagesRef.current[i] = img;
             chunkLoaded++;
-            setLoadedCount((prev) => Math.min(prev + 1, frameCount - startFrame));
             if (chunkLoaded === endIndex - currentIndex) {
               currentIndex = endIndex;
               scheduleChunk();
@@ -132,17 +128,9 @@ export default function ScrollCanvasSequence({
 
       scrollProgress = Math.max(0, Math.min(1, -rect.top / totalScrollableHeight));
       
-      // Target frame calculation from startFrame (30) to last frame (239)
+      // Target frame calculation from startFrame (35) to last frame (239)
       const effectiveFrames = frameCount - 1 - startFrame;
       targetFrame = startFrame + scrollProgress * effectiveFrames;
-
-      // Smooth fade out near the end of scroll
-      if (scrollProgress > 0.94) {
-        const fadeProgress = (1 - scrollProgress) / 0.06;
-        setOpacity(Math.max(0, fadeProgress));
-      } else {
-        setOpacity(1);
-      }
     };
 
     const render = () => {
@@ -167,10 +155,10 @@ export default function ScrollCanvasSequence({
         const isMobile = canvasWidth < 640;
         const imgAspect = img.width / img.height;
 
-        // 1. Initial State at progress = 0 (Lowered in Hero banner, larger size)
+        // 1. Initial State at progress = 0 (Shifted ~50px right in Hero, larger size)
         const startDrawHeight = isMobile ? 220 : Math.min(canvasHeight * 0.42, 380);
         const startDrawWidth = startDrawHeight * imgAspect;
-        const startX = (canvasWidth - startDrawWidth) / 2;
+        const startX = (canvasWidth - startDrawWidth) / 2 + (isMobile ? 20 : 50);
         const startY = (canvasHeight - startDrawHeight) / 2 + (isMobile ? 40 : 110);
 
         // 2. Final State at progress = 1 (Further right on desktop, smaller companion size)
@@ -223,10 +211,7 @@ export default function ScrollCanvasSequence({
       ref={containerRef}
       className={`absolute inset-0 w-full pointer-events-none ${className}`}
     >
-      <div
-        className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20 transition-opacity duration-300"
-        style={{ opacity }}
-      >
+      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20">
         <canvas ref={canvasRef} className="block max-w-full max-h-full" />
       </div>
     </div>

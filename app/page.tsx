@@ -31,10 +31,9 @@ export default function Home() {
             <CaseStudiesSection />
             <TestimonialsSection />
             <FaqSection />
+            <CtaSection />
           </div>
         </div>
-
-        <CtaSection />
       </main>
       <Footer />
     </div>
