@@ -39,13 +39,13 @@ export default function MethodologySection() {
   ];
 
   return (
-    <section className="max-w-[1240px] mx-auto px-6 py-20 border-t border-brand-border" id="metodologia">
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 py-14 sm:py-20 border-t border-brand-border" id="metodologia">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">
         <div>
           <span className="font-mono text-xs uppercase tracking-widest text-brand-slate block mb-2">
             02 / METODOLOGÍA SDLC
           </span>
-          <h2 className="font-display font-extrabold text-4xl sm:text-5xl uppercase tracking-tight text-brand-navy">
+          <h2 className="font-display font-extrabold text-3xl sm:text-5xl uppercase tracking-tight text-brand-navy">
             CICLO DE VIDA DE SOFTWARE.
           </h2>
         </div>
@@ -54,23 +54,23 @@ export default function MethodologySection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {steps.map((step) => (
           <div
             key={step.num}
-            className={`p-6 rounded-3xl flex flex-col justify-between min-h-[300px] h-full border-2 transition-all ${
+            className={`p-5 sm:p-6 rounded-3xl flex flex-col justify-between min-h-[280px] sm:min-h-[300px] h-full border-2 transition-all ${
               step.active
                 ? "bg-white border-brand-navy shadow-lg"
                 : "bg-brand-light border-brand-border"
             }`}
           >
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-display font-extrabold text-4xl text-brand-navy">
+              <div className="flex items-center justify-between mb-5 sm:mb-6">
+                <span className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy">
                   {step.num}
                 </span>
                 <span
-                  className={`px-2.5 py-1 rounded-full font-mono text-[11px] font-bold ${
+                  className={`px-2.5 py-1 rounded-full font-mono text-[10px] sm:text-[11px] font-bold ${
                     step.active
                       ? "bg-brand-lime text-brand-navy"
                       : "bg-white border border-brand-border text-brand-slate"
@@ -79,7 +79,7 @@ export default function MethodologySection() {
                   {step.time}
                 </span>
               </div>
-              <h3 className="font-display font-bold text-lg uppercase tracking-tight text-brand-navy mb-2">
+              <h3 className="font-display font-bold text-base sm:text-lg uppercase tracking-tight text-brand-navy mb-2">
                 {step.title}
               </h3>
               <p className="text-xs sm:text-sm text-brand-slate leading-relaxed">
@@ -87,7 +87,7 @@ export default function MethodologySection() {
               </p>
             </div>
 
-            <div className="font-mono text-[11px] text-brand-navy font-semibold flex items-center gap-1.5 pt-4 border-t border-brand-border/60">
+            <div className="font-mono text-[10px] sm:text-[11px] text-brand-navy font-semibold flex items-center gap-1.5 pt-4 border-t border-brand-border/60 mt-4">
               <span className="material-symbols-outlined text-brand-lime text-[16px]">
                 task_alt
               </span>

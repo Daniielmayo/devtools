@@ -39,13 +39,13 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section className="max-w-[1240px] mx-auto px-6 pb-28" id="servicios">
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 pb-16 sm:pb-28" id="servicios">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-12 gap-4 sm:gap-6">
         <div>
           <span className="font-mono text-xs uppercase tracking-widest text-brand-slate block mb-2">
             01 / CAPACIDADES TÉCNICAS
           </span>
-          <h2 className="font-display font-extrabold text-4xl sm:text-5xl uppercase tracking-tight text-brand-navy">
+          <h2 className="font-display font-extrabold text-3xl sm:text-5xl uppercase tracking-tight text-brand-navy">
             SOLUCIONES TECNOLÓGICAS.
           </h2>
         </div>
@@ -54,16 +54,16 @@ export default function ServicesSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {services.map((service) => (
           <div
             key={service.number}
-            className="group bg-white rounded-3xl p-6 border border-brand-border hover:border-brand-navy transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md"
+            className="group bg-white rounded-3xl p-5 sm:p-6 border border-brand-border hover:border-brand-navy transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-md"
           >
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-brand-light border border-brand-border flex items-center justify-center text-brand-navy group-hover:bg-brand-lime transition-colors">
-                  <span className="material-symbols-outlined text-[24px]">
+              <div className="flex items-center justify-between mb-5 sm:mb-6">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-brand-light border border-brand-border flex items-center justify-center text-brand-navy group-hover:bg-brand-lime transition-colors">
+                  <span className="material-symbols-outlined text-[20px] sm:text-[24px]">
                     {service.icon}
                   </span>
                 </div>
@@ -71,7 +71,7 @@ export default function ServicesSection() {
                   {service.number}
                 </span>
               </div>
-              <h3 className="font-display font-bold text-xl uppercase tracking-tight text-brand-navy mb-3">
+              <h3 className="font-display font-bold text-lg sm:text-xl uppercase tracking-tight text-brand-navy mb-2 sm:mb-3">
                 {service.title}
               </h3>
               <p className="text-brand-slate text-xs sm:text-sm leading-relaxed mb-6">
@@ -79,7 +79,7 @@ export default function ServicesSection() {
               </p>
             </div>
 
-            <div className="pt-4 border-t border-brand-border flex items-center justify-between font-mono text-[11px] text-brand-slate">
+            <div className="pt-4 border-t border-brand-border flex items-center justify-between font-mono text-[10px] sm:text-[11px] text-brand-slate">
               <span>{service.tags}</span>
               <span className="text-brand-navy font-bold">{service.timeframe}</span>
             </div>

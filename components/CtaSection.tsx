@@ -11,28 +11,28 @@ export default function CtaSection() {
   };
 
   return (
-    <section className="max-w-[1240px] mx-auto px-6 py-16" id="contacto">
-      <div className="relative w-full rounded-[32px] overflow-hidden bg-brand-navy text-white p-8 sm:p-12 lg:p-16 border border-white/10 shadow-2xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/95 to-brand-deep/90"></div>
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 py-10 sm:py-16" id="contacto">
+      <div className="relative w-full rounded-[24px] sm:rounded-[32px] overflow-hidden bg-brand-navy text-white p-6 sm:p-12 lg:p-16 border border-white/10 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/95 to-brand-deep/90 pointer-events-none"></div>
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 items-center">
           {/* Text and Headline */}
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 font-mono text-[11px] text-brand-lime font-bold uppercase tracking-wider mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 font-mono text-[10px] sm:text-[11px] text-brand-lime font-bold uppercase tracking-wider mb-4 sm:mb-6">
               <span className="w-2 h-2 rounded-full bg-brand-lime animate-ping"></span>
               <span>Slots SDLC Q3/Q4 disponibles</span>
             </div>
-            <h2 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl uppercase leading-[0.92] tracking-tighter mb-6">
+            <h2 className="font-display font-black text-3xl sm:text-6xl lg:text-7xl uppercase leading-[0.95] sm:leading-[0.92] tracking-tighter mb-4 sm:mb-6">
               TU PRÓXIMO <br />
               <span className="text-brand-lime">PROYECTO</span> <br />
               EMPIEZA AQUÍ.
             </h2>
-            <p className="text-gray-300 text-base sm:text-lg max-w-xl leading-relaxed mb-8">
+            <p className="text-gray-300 text-sm sm:text-lg max-w-xl leading-relaxed mb-6 sm:mb-8">
               Cuéntanos tu requerimiento o agenda una sesión técnica de 15 minutos. Sin comerciales: hablarás directamente con un Tech Lead para analizar alcance y viabilidad técnica.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="mailto:contacto@devtools.tech"
-                className="px-6 py-4 rounded-full bg-brand-lime text-brand-navy font-display font-extrabold text-sm uppercase tracking-wider hover:bg-white transition-all shadow-xl flex items-center gap-2"
+                className="w-full sm:w-auto text-center px-6 py-3.5 sm:py-4 rounded-full bg-brand-lime text-brand-navy font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider hover:bg-white transition-all shadow-xl flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   mail
@@ -43,14 +43,14 @@ export default function CtaSection() {
           </div>
 
           {/* Quick Form */}
-          <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 text-brand-navy shadow-2xl">
-            <h3 className="font-display font-bold text-xl uppercase tracking-tight mb-1 text-brand-navy">
+          <div className="lg:col-span-5 bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-brand-navy shadow-2xl">
+            <h3 className="font-display font-bold text-lg sm:text-xl uppercase tracking-tight mb-1 text-brand-navy">
               Diagnóstico en 15 Min
             </h3>
-            <p className="text-xs text-brand-slate mb-6">
+            <p className="text-xs text-brand-slate mb-5">
               Respuesta con Tech Lead en menos de 2 horas hábiles.
             </p>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
                 <label className="block font-mono text-[10px] uppercase font-bold text-brand-slate mb-1">
                   Nombre o Empresa
@@ -59,7 +59,7 @@ export default function CtaSection() {
                   type="text"
                   required
                   placeholder="DevTools Client"
-                  className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy placeholder:text-brand-slate/60 text-sm focus:border-brand-navy focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy placeholder:text-brand-slate/60 text-xs sm:text-sm focus:border-brand-navy focus:outline-none"
                 />
               </div>
               <div>
@@ -70,14 +70,14 @@ export default function CtaSection() {
                   type="email"
                   required
                   placeholder="contacto@empresa.com"
-                  className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy placeholder:text-brand-slate/60 text-sm focus:border-brand-navy focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy placeholder:text-brand-slate/60 text-xs sm:text-sm focus:border-brand-navy focus:outline-none"
                 />
               </div>
               <div>
                 <label className="block font-mono text-[10px] uppercase font-bold text-brand-slate mb-1">
                   Servicio Requerido
                 </label>
-                <select className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy text-sm focus:border-brand-navy focus:outline-none">
+                <select className="w-full px-4 py-2.5 rounded-xl border border-brand-border bg-brand-light text-brand-navy text-xs sm:text-sm focus:border-brand-navy focus:outline-none">
                   <option>Ciclo de Vida Completo (SDLC)</option>
                   <option>Plataforma SaaS / Aplicación Web</option>
                   <option>App Móvil (iOS &amp; Android)</option>

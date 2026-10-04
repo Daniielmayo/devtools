@@ -27,28 +27,28 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="max-w-[1240px] mx-auto px-6 py-20 border-t border-brand-border">
-      <div className="mb-12">
+    <section className="max-w-[1240px] mx-auto px-4 sm:px-6 py-14 sm:py-20 border-t border-brand-border">
+      <div className="mb-8 sm:mb-12">
         <span className="font-mono text-xs uppercase tracking-widest text-brand-slate block mb-2">
           CLIENTES &amp; EQUIPOS
         </span>
-        <h2 className="font-display font-extrabold text-4xl sm:text-6xl uppercase tracking-tight text-brand-navy">
+        <h2 className="font-display font-extrabold text-3xl sm:text-6xl uppercase tracking-tight text-brand-navy">
           CONSTRUIR MEJOR, JUNTOS.
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {testimonials.map((t, idx) => (
           <div
             key={idx}
-            className={`p-8 rounded-3xl flex flex-col justify-between ${
+            className={`p-6 sm:p-8 rounded-3xl flex flex-col justify-between ${
               t.featured
                 ? "bg-brand-lime border border-brand-lime shadow-lg"
                 : "bg-white border border-brand-border shadow-sm"
             }`}
           >
             <p
-              className={`text-base sm:text-lg leading-relaxed mb-8 ${
+              className={`text-sm sm:text-lg leading-relaxed mb-6 sm:mb-8 ${
                 t.featured
                   ? "text-brand-navy font-medium"
                   : "text-brand-navy font-normal"
@@ -58,7 +58,7 @@ export default function TestimonialsSection() {
             </p>
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold font-mono text-xs ${
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold font-mono text-xs ${
                   t.featured
                     ? "bg-brand-navy text-white"
                     : "bg-brand-light border border-brand-border text-brand-navy"
@@ -67,11 +67,11 @@ export default function TestimonialsSection() {
                 {t.initials}
               </div>
               <div>
-                <div className="font-display font-bold text-sm text-brand-navy">
+                <div className="font-display font-bold text-xs sm:text-sm text-brand-navy">
                   {t.name}
                 </div>
                 <div
-                  className={`font-mono text-xs ${
+                  className={`font-mono text-[11px] ${
                     t.featured ? "text-brand-navy/70" : "text-brand-slate"
                   }`}
                 >
