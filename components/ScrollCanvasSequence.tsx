@@ -6,7 +6,6 @@ interface ScrollCanvasSequenceProps {
   frameCount?: number;
   framePrefix?: string;
   frameExtension?: string;
-  containerHeightClass?: string;
   className?: string;
 }
 
@@ -14,28 +13,26 @@ export default function ScrollCanvasSequence({
   frameCount = 240,
   framePrefix = "/frames/dog_",
   frameExtension = ".webp",
-  containerHeightClass = "h-[300vh]",
   className = "",
 }: ScrollCanvasSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loadedCount, setLoadedCount] = useState(0);
   const [isFirstFrameLoaded, setIsFirstFrameLoaded] = useState(false);
+  const [opacity, setOpacity] = useState(1);
 
-  // Store image objects in a ref to prevent re-renders
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
 
   useEffect(() => {
     imagesRef.current = new Array(frameCount).fill(null);
     let isMounted = true;
 
-    // Helper to format frame path: e.g. /frames/dog_0001.webp
     const getFrameUrl = (index: number) => {
       const paddedIndex = String(index + 1).padStart(4, "0");
       return `${framePrefix}${paddedIndex}${frameExtension}`;
     };
 
-    // 1. Critical FCP Preload: Load Frame 0 immediately
+    // 1. Critical FCP Preload: Load Frame 0
     const firstImg = new Image();
     firstImg.src = getFrameUrl(0);
     firstImg.onload = () => {
@@ -43,18 +40,16 @@ export default function ScrollCanvasSequence({
       imagesRef.current[0] = firstImg;
       setIsFirstFrameLoaded(true);
       setLoadedCount(1);
-
-      // 2. Load remaining frames asynchronously in background chunks using requestIdleCallback
       loadRemainingFramesInChunks();
     };
 
+    // 2. Async Chunk Preload with requestIdleCallback
     const loadRemainingFramesInChunks = () => {
       let currentIndex = 1;
       const CHUNK_SIZE = 15;
 
       const loadNextChunk = () => {
         if (!isMounted || currentIndex >= frameCount) return;
-
         const endIndex = Math.min(currentIndex + CHUNK_SIZE, frameCount);
         let chunkLoaded = 0;
 
@@ -66,7 +61,6 @@ export default function ScrollCanvasSequence({
             imagesRef.current[i] = img;
             chunkLoaded++;
             setLoadedCount((prev) => Math.min(prev + 1, frameCount));
-
             if (chunkLoaded === endIndex - currentIndex) {
               currentIndex = endIndex;
               scheduleChunk();
@@ -113,7 +107,6 @@ export default function ScrollCanvasSequence({
     let targetFrame = 0;
     let lastDrawnIndex = -1;
 
-    // Handle DPR capping to 2 max
     const setupCanvasDimensions = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const width = canvas.parentElement?.clientWidth || window.innerWidth;
@@ -125,36 +118,35 @@ export default function ScrollCanvasSequence({
       canvas.style.height = `${height}px`;
 
       ctx.scale(dpr, dpr);
-      lastDrawnIndex = -1; // Trigger redraw on resize
+      lastDrawnIndex = -1;
     };
 
     setupCanvasDimensions();
     window.addEventListener("resize", setupCanvasDimensions);
 
-    // Calculate target frame index from scroll position
     const updateTargetFrame = () => {
       const rect = container.getBoundingClientRect();
       const totalScrollableHeight = rect.height - window.innerHeight;
-
       if (totalScrollableHeight <= 0) return;
 
-      // Scroll progress between 0 and 1
-      const progress = Math.max(
-        0,
-        Math.min(1, -rect.top / totalScrollableHeight)
-      );
+      const progress = Math.max(0, Math.min(1, -rect.top / totalScrollableHeight));
       targetFrame = progress * (frameCount - 1);
+
+      // Fade out smoothly near the end of the scroll container (last 5% of scroll)
+      if (progress > 0.95) {
+        const fadeProgress = (1 - progress) / 0.05;
+        setOpacity(Math.max(0, fadeProgress));
+      } else {
+        setOpacity(1);
+      }
     };
 
-    // Render loop with lerp (interpolation) and Zero-Redraw optimization
     const render = () => {
       if (!isVisible) return;
-
       updateTargetFrame();
 
-      // Lerp for ultra-smooth animation
-      const lerpFactor = 0.12;
-      currentFrame += (targetFrame - currentFrame) * lerpFactor;
+      // Lerp for smooth animation tracking
+      currentFrame += (targetFrame - currentFrame) * 0.12;
 
       const frameIndexToDraw = Math.round(currentFrame);
       const clampedIndex = Math.max(0, Math.min(frameCount - 1, frameIndexToDraw));
@@ -164,12 +156,13 @@ export default function ScrollCanvasSequence({
         const img = imagesRef.current[clampedIndex] || imagesRef.current[0];
 
         if (img && img.complete) {
-          const canvasWidth = canvas.width / Math.min(window.devicePixelRatio || 1, 2);
-          const canvasHeight = canvas.height / Math.min(window.devicePixelRatio || 1, 2);
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const canvasWidth = canvas.width / dpr;
+          const canvasHeight = canvas.height / dpr;
 
           ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-          // Object-contain aspect ratio scaling
+          // Aspect Ratio Fit (Contain)
           const imgAspect = img.width / img.height;
           const canvasAspect = canvasWidth / canvasHeight;
 
@@ -179,12 +172,12 @@ export default function ScrollCanvasSequence({
           let offsetY = 0;
 
           if (canvasAspect > imgAspect) {
-            drawHeight = canvasHeight * 0.85; // Slightly padded for aesthetics
+            drawHeight = canvasHeight * 0.75; // 75% height for elegant floating placement
             drawWidth = drawHeight * imgAspect;
             offsetX = (canvasWidth - drawWidth) / 2;
             offsetY = (canvasHeight - drawHeight) / 2;
           } else {
-            drawWidth = canvasWidth * 0.85;
+            drawWidth = canvasWidth * 0.75;
             drawHeight = drawWidth / imgAspect;
             offsetX = (canvasWidth - drawWidth) / 2;
             offsetY = (canvasHeight - drawHeight) / 2;
@@ -198,7 +191,6 @@ export default function ScrollCanvasSequence({
       animFrameId = requestAnimationFrame(render);
     };
 
-    // IntersectionObserver to disconnect loop when offscreen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -208,7 +200,7 @@ export default function ScrollCanvasSequence({
           cancelAnimationFrame(animFrameId);
         }
       },
-      { threshold: 0.05 }
+      { threshold: 0.01 }
     );
 
     observer.observe(container);
@@ -223,19 +215,13 @@ export default function ScrollCanvasSequence({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full ${containerHeightClass} ${className}`}
+      className={`absolute inset-0 w-full pointer-events-none ${className}`}
     >
-      {/* Sticky Canvas Container */}
-      <div className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-10">
-        <canvas ref={canvasRef} className="block max-w-full max-h-full" />
-
-        {/* Optional Progress Indicator Badge */}
-        {loadedCount < frameCount && (
-          <div className="absolute bottom-6 right-6 bg-brand-navy/80 backdrop-blur-md text-white border border-white/10 px-3 py-1.5 rounded-full font-mono text-[11px] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse"></span>
-            <span>Cargando secuencia: {Math.round((loadedCount / frameCount) * 100)}%</span>
-          </div>
-        )}
+      <div
+        className="sticky top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden pointer-events-none z-20 transition-opacity duration-300"
+        style={{ opacity }}
+      >
+        <canvas ref={canvasRef} className="block max-w-full max-h-full mix-blend-multiply dark:mix-blend-screen" />
       </div>
     </div>
   );
