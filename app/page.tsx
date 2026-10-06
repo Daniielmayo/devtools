@@ -11,6 +11,7 @@ import FaqSection from "@/components/FaqSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
 import ScrollCanvasSequence from "@/components/ScrollCanvasSequence";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
   return (
@@ -23,15 +24,33 @@ export default function Home() {
           
           <div className="relative z-10">
             <HeroSection />
-            <MarqueeTicker />
-            <ManifestoSection />
-            <ServicesSection />
-            <AvailabilitySection />
-            <MethodologySection />
-            <CaseStudiesSection />
-            <TestimonialsSection />
-            <FaqSection />
-            <CtaSection />
+            <ScrollReveal>
+              <MarqueeTicker />
+            </ScrollReveal>
+            <ScrollReveal>
+              <ManifestoSection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <ServicesSection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <AvailabilitySection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <MethodologySection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <CaseStudiesSection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <TestimonialsSection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <FaqSection />
+            </ScrollReveal>
+            <ScrollReveal>
+              <CtaSection />
+            </ScrollReveal>
           </div>
         </div>
       </main>
